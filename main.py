@@ -1,10 +1,11 @@
+
 import os
-from telegram import Update
+from telegram import Update, ChatPermissions
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("BOT_TOKEN")
 
-app = ApplicationBuilder().token(BOT_TOKEN).build()
+app = ApplicationBuilder().token(TOKEN).build()
 
 async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
@@ -13,7 +14,7 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.ban_member(
         update.message.reply_to_message.from_user.id
     )
-    await update.message.reply_text("User banned.")
+    await update.message.reply_text("🚫 User banned")
 
 async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
@@ -22,7 +23,7 @@ async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.unban_member(
         update.message.reply_to_message.from_user.id
     )
-    await update.message.reply_text("User unbanned.")
+    await update.message.reply_text("✅ User unbanned")
 
 async def mute(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
@@ -30,9 +31,9 @@ async def mute(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     await update.message.chat.restrict_member(
         update.message.reply_to_message.from_user.id,
-        permissions={}
+        ChatPermissions()
     )
-    await update.message.reply_text("User muted.")
+    await update.message.reply_text("🔇 User muted")
 
 app.add_handler(CommandHandler("ban", ban))
 app.add_handler(CommandHandler("unban", unban))
